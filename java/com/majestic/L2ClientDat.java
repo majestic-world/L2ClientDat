@@ -232,13 +232,14 @@ public class L2ClientDat extends JFrame {
         getContentPane().add(buttonPane, "First");
         getContentPane().add(jsp);
 
-        // Set icons.
-        final List<Image> icons = new ArrayList<>();
-        icons.add(new ImageIcon("." + File.separator + "images" + File.separator + "l2jmobius_16x16.png").getImage());
-        icons.add(new ImageIcon("." + File.separator + "images" + File.separator + "l2jmobius_32x32.png").getImage());
-        icons.add(new ImageIcon("." + File.separator + "images" + File.separator + "l2jmobius_64x64.png").getImage());
-        icons.add(new ImageIcon("." + File.separator + "images" + File.separator + "l2jmobius_128x128.png").getImage());
-        setIconImages(icons);
+        // Set icon.
+        try {
+            final String iconPath = "." + File.separator + "images" + File.separator + "favicon.ico";
+            final Image icon = Toolkit.getDefaultToolkit().getImage(iconPath);
+            setIconImage(icon);
+        } catch (Exception e) {
+            LOGGER.log(Level.WARNING, "Could not load application icon: " + e.getMessage());
+        }
 
         pack();
         if (_splashScreen != null) {

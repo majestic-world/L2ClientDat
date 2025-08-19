@@ -9,7 +9,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="81af073e-c6b5-4225-83ef-46f031150501" name="Changes" comment="" />
+    <list default="true" id="81af073e-c6b5-4225-83ef-46f031150501" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/config/config_window.ini" beforeDir="false" afterPath="$PROJECT_DIR$/dist/config/config_window.ini" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/config/log.cfg" beforeDir="false" afterPath="$PROJECT_DIR$/dist/config/log.cfg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/libs/L2ClientDat.jar" beforeDir="false" afterPath="$PROJECT_DIR$/dist/libs/L2ClientDat.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/log/java0.log" beforeDir="false" afterPath="$PROJECT_DIR$/dist/log/java0.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/log/java1.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/log/java2.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/log/java3.log" beforeDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
