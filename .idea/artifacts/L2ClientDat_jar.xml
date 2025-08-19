@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="L2ClientDat:jar">
+    <output-path>$PROJECT_DIR$/dist/libs</output-path>
+    <root id="archive" name="L2ClientDat.jar">
+      <element id="module-output" name="L2ClientDat" />
+    </root>
+  </artifact>
+</component>

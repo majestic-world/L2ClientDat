@@ -1,0 +1,8 @@
+2025.08.19 09:39:09,741	INFO	57	com.majestic.L2ClientDat	---------------------------------------
+2025.08.19 09:39:09,758	INFO	57	com.majestic.L2ClientDat	Open file: Skillgrp_Classic.dat
+2025.08.19 09:39:09,778	INFO	81	com.majestic.L2ClientDat	File Skillgrp_Classic.dat encrypted. Lineage2Ver413 decrypt ...
+2025.08.19 09:39:09,869	INFO	81	com.majestic.L2ClientDat	Decrypt Skillgrp_Classic.dat file successfully by v413_encdec decrypter.
+2025.08.19 09:39:09,870	INFO	81	com.majestic.L2ClientDat	Read the file structure ...
+2025.08.19 09:39:09,879	INFO	81	com.majestic.L2ClientDat	Unpacking [L2GameDataName.dat]
+2025.08.19 09:39:10,068	INFO	81	com.majestic.L2ClientDat	GameDataName: Load 100426 count.
+2025.08.19 09:39:10,405	INFO	81	com.majestic.L2ClientDat	Completed.

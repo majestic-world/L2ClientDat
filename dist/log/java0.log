@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+<record>
+  <date>2025-08-19T13:26:05.938037600Z</date>
+  <millis>1755609965938</millis>
+  <nanos>37600</nanos>
+  <sequence>0</sequence>
+  <logger>com.majestic.L2ClientDat</logger>
+  <level>INFO</level>
+  <class>com.majestic.L2ClientDat</class>
+  <method>addLogConsole</method>
+  <thread>57</thread>
+  <message>---------------------------------------</message>
+</record>
+<record>
+  <date>2025-08-19T13:26:05.946037200Z</date>
+  <millis>1755609965946</millis>
+  <nanos>37200</nanos>
+  <sequence>1</sequence>
+  <logger>com.majestic.L2ClientDat</logger>
+  <level>INFO</level>
+  <class>com.majestic.L2ClientDat</class>
+  <method>addLogConsole</method>
+  <thread>57</thread>
+  <message>Open file: L2.ini</message>
+</record>
+<record>
+  <date>2025-08-19T13:26:05.959037100Z</date>
+  <millis>1755609965959</millis>
+  <nanos>37100</nanos>
+  <sequence>2</sequence>
+  <logger>com.majestic.L2ClientDat</logger>
+  <level>INFO</level>
+  <class>com.majestic.L2ClientDat</class>
+  <method>addLogConsole</method>
+  <thread>79</thread>
+  <message>File L2.ini encrypted. Lineage2Ver413 decrypt ...</message>
+</record>
+<record>
+  <date>2025-08-19T13:26:05.970040Z</date>
+  <millis>1755609965970</millis>
+  <nanos>40000</nanos>
+  <sequence>3</sequence>
+  <logger>com.majestic.L2ClientDat</logger>
+  <level>INFO</level>
+  <class>com.majestic.L2ClientDat</class>
+  <method>addLogConsole</method>
+  <thread>79</thread>
+  <message>Decrypt L2.ini file successfully by v413_encdec decrypter.</message>
+</record>
+<record>
+  <date>2025-08-19T13:26:05.971039300Z</date>
+  <millis>1755609965971</millis>
+  <nanos>39300</nanos>
+  <sequence>4</sequence>
+  <logger>com.majestic.L2ClientDat</logger>
+  <level>INFO</level>
+  <class>com.majestic.L2ClientDat</class>
+  <method>addLogConsole</method>
+  <thread>79</thread>
+  <message>Completed.</message>
+</record>

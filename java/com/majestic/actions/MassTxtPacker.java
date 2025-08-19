@@ -1,0 +1,211 @@
+package com.majestic.actions;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import com.majestic.L2ClientDat;
+import com.majestic.clientcryptor.DatFile;
+import com.majestic.clientcryptor.crypt.DatCrypter;
+import com.majestic.clientcryptor.crypt.RSADatCrypter;
+import com.majestic.config.ConfigDebug;
+import com.majestic.config.ConfigWindow;
+import com.majestic.data.GameDataName;
+import com.majestic.xml.CryptVersionParser;
+import com.majestic.xml.Descriptor;
+import com.majestic.xml.DescriptorParser;
+import com.majestic.xml.DescriptorWriter;
+
+public class MassTxtPacker extends ActionTask
+{
+	private static final Logger LOGGER = Logger.getLogger(MassTxtPacker.class.getName());
+	
+	private final String _chronicle;
+	private final String _path;
+	
+	public MassTxtPacker(L2ClientDat l2ClientDat, String chronicle, String path)
+	{
+		super(l2ClientDat);
+		_chronicle = chronicle;
+		_path = path;
+	}
+	
+	@Override
+	protected void action()
+	{
+		try
+		{
+			action0();
+		}
+		catch (Exception e)
+		{
+			LOGGER.log(Level.SEVERE, null, e);
+		}
+	}
+	
+	public void action0() throws Exception
+	{
+		L2ClientDat.addLogConsole("Mass packer with using " + _chronicle + " chronicles by path [" + _path + "]", true);
+		
+		final File baseDir = new File(_path);
+		if (!baseDir.exists())
+		{
+			L2ClientDat.addLogConsole("Directory [" + _path + "] does not exists.", true);
+			return;
+		}
+		
+		final DatCrypter encrypter = CryptVersionParser.getInstance().getEncryptKey(ConfigWindow.CURRENT_ENCRYPT);
+		if (!(encrypter instanceof RSADatCrypter))
+		{
+			L2ClientDat.addLogConsole("Selected encryptor not RSA! Please select RSA encryptor.", true);
+			return;
+		}
+		
+		if (!encrypter.isEncrypt())
+		{
+			L2ClientDat.addLogConsole("Selected encryptor does not have encrypt RSA key.", true);
+			return;
+		}
+		
+		final String packDirPath = _path + "/packed";
+		final File packDir = new File(packDirPath);
+		if (!packDir.exists() && !packDir.mkdir())
+		{
+			L2ClientDat.addLogConsole("Cannot create directory [" + packDir + "].", true);
+			return;
+		}
+		
+		final File[] files = baseDir.listFiles(pathname -> encrypter.checkFileExtension(pathname.getName()));
+		if ((files == null) || (files.length == 0))
+		{
+			L2ClientDat.addLogConsole("Directory [" + _path + "] is empty.", true);
+			return;
+		}
+		
+		double progress = getCurrentProgress();
+		if (isCancelled())
+		{
+			return;
+		}
+		
+		progress = addProgress(progress, 2.0, 100.0);
+		GameDataName.getInstance().clear();
+		final long startTime = System.currentTimeMillis();
+		progress = addProgress(progress, 3.0, 100.0);
+		final double progressWeight = 90.0 / files.length;
+		
+		for (File file : files)
+		{
+			if (file.getName().equalsIgnoreCase("L2GameDataName.txt"))
+			{
+				pack(this, progressWeight, _chronicle, encrypter, file, packDir);
+				break;
+			}
+		}
+		
+		for (File file : files)
+		{
+			if (!file.getName().equalsIgnoreCase("L2GameDataName.txt"))
+			{
+				pack(this, progressWeight, _chronicle, encrypter, file, packDir);
+			}
+		}
+		
+		if (isCancelled())
+		{
+			return;
+		}
+		
+		progress = addProgress(progress, 90.0, 100.0);
+		GameDataName.getInstance().checkAndUpdate(packDir.getPath(), encrypter);
+		
+		if (isCancelled())
+		{
+			return;
+		}
+		
+		addProgress(progress, 5.0, 100.0);
+		final long diffTime = (System.currentTimeMillis() - startTime) / 1000L;
+		L2ClientDat.addLogConsole("Completed. Elapsed ".concat(String.valueOf(diffTime)).concat(" sec"), true);
+	}
+	
+	private static void pack(ActionTask actionTask, double weight, String chronicle, DatCrypter encrypter, File file, File packDir)
+	{
+		double progress = actionTask.getCurrentProgress();
+		L2ClientDat.addLogConsole("Start packing [" + file.getName() + "]...", true);
+		
+		try
+		{
+			final File outFile = new File(packDir, file.getName().replace(".txt", ".dat"));
+			byte[] buff = null;
+			boolean shouldContinue = true;
+			
+			if (file.getName().endsWith(".dat") || file.getName().endsWith(".txt"))
+			{
+				final Descriptor desc = DescriptorParser.getInstance().findDescriptorForFile(chronicle, file.getName().replace(".txt", ".dat"));
+				if (desc != null)
+				{
+					final byte[] array = Files.readAllBytes(file.toPath());
+					final String joined = new String(array, 0, array.length, StandardCharsets.UTF_8);
+					buff = DescriptorWriter.parseData(actionTask, actionTask.getWeightValue(80.0, weight), outFile, encrypter, desc, joined.replace("\n", "\r\n"), true);
+					if (actionTask.isCancelled())
+					{
+						shouldContinue = false;
+					}
+					progress = actionTask.addProgress(progress, 80.0, weight);
+				}
+				else
+				{
+					L2ClientDat.addLogConsole("Not found the structure of the file: " + file.getName(), true);
+				}
+			}
+			else if (file.getName().endsWith(".ini"))
+			{
+				final byte[] array2 = Files.readAllBytes(file.toPath());
+				final String joined2 = new String(array2, 0, array2.length, StandardCharsets.UTF_8);
+				buff = joined2.replace("\n", "\r\n").getBytes();
+			}
+			else
+			{
+				L2ClientDat.addLogConsole("Unknown file [" + file.getName() + "] type!", true);
+				shouldContinue = false;
+			}
+			
+			if (shouldContinue && (buff != null))
+			{
+				try
+				{
+					if (ConfigDebug.ENCRYPT)
+					{
+						DatFile.encrypt(buff, outFile.getPath(), encrypter);
+					}
+					else
+					{
+						final FileOutputStream os = new FileOutputStream(outFile, false);
+						os.write(buff);
+						os.close();
+					}
+					L2ClientDat.addLogConsole("Success packed [" + file.getName() + "]", true);
+				}
+				catch (Exception e)
+				{
+					LOGGER.log(Level.WARNING, e.getMessage(), e);
+				}
+			}
+			
+			if (actionTask.isCancelled())
+			{
+				return;
+			}
+			
+			actionTask.addProgress(progress, 20.0, weight);
+		}
+		catch (Exception e2)
+		{
+			LOGGER.log(Level.WARNING, e2.getMessage(), e2);
+		}
+	}
+}
